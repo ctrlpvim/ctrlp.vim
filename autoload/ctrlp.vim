@@ -1015,7 +1015,9 @@ fu! ctrlp#acceptfile(...)
 		let [md, line] = [a:1, a:2]
 		let atl = a:0 > 2 ? a:3 : ''
 	en
-	if s:itemtype == 1
+	if !type(line)
+		let [filpath, bufnr, useb] = [line, line, 1]
+	elsei s:itemtype == 1
 		let useb = 1
 		let bufnr = str2nr(matchstr(line, s:bufnrpat))
 		let filpath = fnamemodify(bufname(bufnr), ':p')
