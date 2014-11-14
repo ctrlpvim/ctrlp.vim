@@ -160,8 +160,8 @@ let s:fpats = {
 	\ '^\S\*$': '\*',
 	\ '^\S\\?$': '\\?',
 	\ }
-let s:bufnrpat = '\s[{]*\zs\d\+'
-let s:bufindpat = '\[\zs[#+]*\ze\]'
+let s:bufnrpat = '<bn>\zs\d\+'
+let s:bufindpat = '<bi>\zs[#+]*\ze</bi>'
 
 " Keypad
 let s:kprange = {
@@ -466,11 +466,11 @@ fu! ctrlp#buffers(...)
 			\ (getbufvar(id, '&mod') ? '+' : '')
 
 		if has('conceal')
-			let line = printf('%5s %-4s %s%-32s  %s',
-				\ '{'.id.'}',
-				\ '['.indicator.']',
-				\ '('.flag, '{'.fnamemodify(bname, ':t').'})',
-				\ '<'.fnamemodify(bname, ':~:.:h').s:lash().'>')
+			let line = printf('%12s %-11s %s%-36s  %s',
+				\ '<bn>'.id.'</bn>',
+				\ '<bi>'.indicator.'</bi>',
+				\ '<br>'.flag, '{'.fnamemodify(bname, ':t').'}</br>',
+				\ '<bp>'.fnamemodify(bname, ':~:.:h').s:lash().'</bp>')
 		el
 			let line = printf('%3s %-2s %-30s  %s',
 				\ id,
@@ -1661,9 +1661,9 @@ fu! ctrlp#syntax()
 	en
 
 	if has('conceal')
-		sy region CtrlPBufferNr     concealends matchgroup=Ignore start='{' end='}'
-		sy region CtrlPBufferInd    concealends matchgroup=Ignore start='\[' end='\]'
-		sy region CtrlPBufferRegion concealends matchgroup=Ignore start='(' end=')'
+		sy region CtrlPBufferNr     concealends matchgroup=Ignore start='<bn>' end='</bn>'
+		sy region CtrlPBufferInd    concealends matchgroup=Ignore start='<bi>' end='</bi>'
+		sy region CtrlPBufferRegion concealends matchgroup=Ignore start='<br>' end='</br>'
 			\ contains=CtrlPBufferHid,CtrlPBufferHidMod,CtrlPBufferVis,CtrlPBufferVisMod,CtrlPBufferCur,CtrlPBufferCurMod
 		sy region CtrlPBufferHid    concealends matchgroup=Ignore     start='\s*{' end='}' contained
 		sy region CtrlPBufferHidMod concealends matchgroup=Ignore    start='+\s*{' end='}' contained
@@ -1671,7 +1671,7 @@ fu! ctrlp#syntax()
 		sy region CtrlPBufferVisMod concealends matchgroup=Ignore  start='\*+\s*{' end='}' contained
 		sy region CtrlPBufferCur    concealends matchgroup=Ignore  start='\*!\s*{' end='}' contained
 		sy region CtrlPBufferCurMod concealends matchgroup=Ignore start='\*+!\s*{' end='}' contained
-		sy region CtrlPBufferPath   concealends matchgroup=Ignore start='<' end='>'
+		sy region CtrlPBufferPath   concealends matchgroup=Ignore start='<bp>' end='</bp>'
 	en
 endf
 
