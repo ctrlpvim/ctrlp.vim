@@ -89,6 +89,7 @@ let [s:pref, s:bpref, s:opts, s:new_opts, s:lc_opts] =
 	\ 'user_command':          ['s:usrcmd', ''],
 	\ 'working_path_mode':     ['s:pathmode', 'ra'],
 	\ 'open_single_match':     ['s:opensingle', 0],
+	\ 'line_prefix':           ['s:lineprefix', '> '],
 	\ }, {
 	\ 'open_multiple_files':   's:opmul',
 	\ 'regexp':                's:regexp',
@@ -1459,7 +1460,7 @@ fu! s:formatline(str)
 		let str .= idc != '' ? ' '.idc : ''
 	en
 	let cond = s:ispath && ( s:winw - 4 ) < s:strwidth(str)
-	retu '> '.( cond ? s:pathshorten(str) : str )
+	retu s:lineprefix.( cond ? s:pathshorten(str) : str )
 endf
 
 fu! s:pathshorten(str)
