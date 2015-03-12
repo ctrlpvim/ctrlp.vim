@@ -113,15 +113,16 @@ fu! ctrlp#bookmarkdir#accept(mode, str)
 endf
 
 fu! ctrlp#bookmarkdir#add(bang, dir, ...)
+	let ctrlp_tilde_homedir = get(g:, 'ctrlp_tilde_homedir', 0)
+	let cwd = fnamemodify(getcwd(), ctrlp_tilde_homedir ? ':p:~' : ':p')
+	let dir = fnamemodify(a:dir, ctrlp_tilde_homedir ? ':p:~' : ':p')
 	if a:bang == '!'
-		let cwd = fnamemodify(a:dir != '' ? a:dir : getcwd(), 
-												\ g:ctrlp_mruf_tilde_homedir ? ':p:~' : ':p')
+		let cwd = dir != '' ? dir : cwd
 		let name = a:0 && a:1 != '' ? a:1 : cwd
 	el
 		let str = 'Directory to bookmark: '
-		let cwd = a:dir != '' ? a:dir : s:getinput(str, getcwd(), 'dir')
+		let cwd = dir != '' ? dir : s:getinput(str, cwd, 'dir')
 		if cwd == '' | retu | en
-		let cwd = fnamemodify(cwd, ':p')
 		let name = a:0 && a:1 != '' ? a:1 : s:getinput('Bookmark as: ', cwd)
 		if name == '' | retu | en
 	en
