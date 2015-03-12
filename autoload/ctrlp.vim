@@ -183,6 +183,14 @@ let s:hlgrps = {
 	\ 'PrtText': 'Normal',
 	\ 'PrtCursor': 'Constant',
 	\ }
+
+" lname, sname of the basic(non-extension) modes
+let s:coretypes = [
+	\ ['files', 'fil'],
+	\ ['buffers', 'buf'],
+	\ ['mru files', 'mru'],
+\ ]
+
 " Get the options {{{2
 fu! s:opts(...)
 	unl! s:usrign s:usrcmd s:urprtmaps
@@ -1385,11 +1393,7 @@ endf
 " Statusline {{{2
 fu! ctrlp#statusline()
 	if !exists('s:statypes')
-		let s:statypes = [
-			\ ['files', 'fil'],
-			\ ['buffers', 'buf'],
-			\ ['mru files', 'mru'],
-			\ ]
+		let s:statypes = copy(s:coretypes)
 		if !empty(g:ctrlp_ext_vars)
 			cal map(copy(g:ctrlp_ext_vars),
 				\ 'add(s:statypes, [ v:val["lname"], v:val["sname"] ])')
@@ -2322,6 +2326,15 @@ fu! ctrlp#setlines(...)
 	let g:ctrlp_lines = eval(types[s:itemtype])
 endf
 
+" Returns [lname, sname]
+fu! s:CurTypeName()
+	if s:itemtype < 3
+		return s:coretypes[s:itemtype]
+	else
+		return [s:getextvar("lname"), s:getextvar('sname')]
+	endif
+endfu
+
 fu! s:ExitIfSingleCandidate()
 	if len(s:Update(s:prompt[0])) == 1
 		call s:AcceptSelection('e')
@@ -2343,7 +2356,9 @@ fu! ctrlp#init(type, ...)
 	cal ctrlp#syntax()
 	cal ctrlp#setlines(s:settype(a:type))
 	cal s:SetDefTxt()
-	if index(s:opensingle, s:getextvar("lname"))>=0 && s:ExitIfSingleCandidate()
+	let curName = s:CurTypeName()
+	let shouldExitSingle = index(s:opensingle, curName[0])>=0 || index(s:opensingle, curName[1])>=0
+	if shouldExitSingle && s:ExitIfSingleCandidate()
 		return 0
 	endif
 	cal s:BuildPrompt(1)
