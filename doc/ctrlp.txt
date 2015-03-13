@@ -322,13 +322,13 @@ when scanning large projects: >
 <
 Some examples: >
   " Single VCS, listing command does not list untracked files:
-  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
+  let g:ctrlp_user_command = ['.git', 'git ls-files %s']
   let g:ctrlp_user_command = ['.hg', 'hg --cwd %s locate -I .']
 
   " Multiple VCS's:
   let g:ctrlp_user_command = {
     \ 'types': {
-      \ 1: ['.git', 'cd %s && git ls-files'],
+      \ 1: ['.git', 'git ls-files %s'],
       \ 2: ['.hg', 'hg --cwd %s locate -I .'],
       \ },
     \ 'fallback': 'find %s -type f'
@@ -336,7 +336,7 @@ Some examples: >
 
   " Single VCS, listing command lists untracked files (slower):
   let g:ctrlp_user_command =
-    \ ['.git', 'cd %s && git ls-files . -co --exclude-standard']
+    \ ['.git', 'git ls-files -co --exclude-standard %s']
 
   let g:ctrlp_user_command =
     \ ['.hg', 'hg --cwd %s status -numac -I . $(hg root)'] " MacOSX/Linux
