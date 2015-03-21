@@ -56,16 +56,22 @@ fu! s:reformat(mrufs, ...)
 endf
 
 fu! s:record(bufnr)
-	if s:exclnomod && &l:modifiable | retu | en
-  if s:exclnomod && !&l:modifiable | retu | en
 	if s:locked | retu | en
+
 	let bufnr = a:bufnr + 0
 	let bufname = bufname(bufnr)
-	if bufnr > 0 && !empty(bufname)
-		cal filter(s:mrbs, 'v:val != bufnr')
-		cal insert(s:mrbs, bufnr)
-		cal s:addtomrufs(bufname)
+
+	if bufnr == 0 || !filereadable(bufname) | retu | en
+  if s:exclnomod && !getbufvar(bufnr,'&modifiable') | retu | en
+  if s:excltemp
+		for tmpdir in [$TMPDIR, $TEMP, $TMP, '/tmp'] "  = set backupskip&?
+			if !empty(tmpdir) && bufname =~# '\v^' . tmpdir . '[\/]' | retu | en
+		endfo
 	en
+
+	cal filter(s:mrbs, 'v:val != bufnr')
+	cal insert(s:mrbs, bufnr)
+	cal s:addtomrufs(bufname)
 endf
 
 fu! s:addtomrufs(fname)
