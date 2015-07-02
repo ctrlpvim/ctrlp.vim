@@ -1028,7 +1028,7 @@ fu! ctrlp#acceptfile(...)
 	en
 	cal s:PrtExit()
 	let tail = s:tail()
-	let j2l = atl != '' ? atl : matchstr(tail, '^ +\zs\d\+$')
+	let j2l = atl != '' ? atl : matchstr(tail, '^ +\zs\d\+\(|\d\+\)$')
 	if ( s:jmptobuf =~ md || ( !empty(s:jmptobuf) && s:jmptobuf !~# '\v^0$' && md =~ '[et]' ) ) && bufnr > 0
 		\ && !( md == 'e' && bufnr == bufnr('%') )
 		let [jmpb, bufwinnr] = [1, bufwinnr(bufnr)]
@@ -2047,7 +2047,16 @@ fu! s:strwidth(str)
 endf
 
 fu! ctrlp#j2l(nr)
-	exe 'norm!' a:nr.'G'
+	let nums = matchlist(a:nr, '\(\d\+\)|\(\d\+\)')
+	let line = nums[1]
+	let column = nums[2]
+
+	let cmd = line . 'G'
+
+	if column != ''
+		let cmd .= column . '|'
+	end
+	exe 'norm!' cmd
 	sil! norm! zvzz
 endf
 
@@ -2134,8 +2143,13 @@ fu! s:openfile(cmd, fid, tail, chkmod, ...)
 		let cmd = cmd == 'b' ? 'sb' : 'sp'
 	en
 	let cmd = cmd =~ '^tab' ? ctrlp#tabcount().cmd : cmd
-	let j2l = a:0 && a:1[0] ? a:1[1] : 0
-	exe cmd.( a:0 && a:1[0] ? '' : a:tail ) s:fnesc(a:fid, 'f')
+
+	" a:0 -> ic??
+	" a:1[0] -> useb
+	" a:1[1] -> address
+
+	let j2l = a:0 && a:1[1] ? a:1[1] : 0
+	exe cmd.( a:0 && a:1[1] ? '' : a:tail ) s:fnesc(a:fid, 'f')
 	if j2l
 		cal ctrlp#j2l(j2l)
 	en
