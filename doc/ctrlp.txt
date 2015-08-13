@@ -563,13 +563,12 @@ default: >
 
                                                     *'g:ctrlp_open_single_match'*
 List of CtrlP modes for which CtrlP should accept an entry directly, if only
-one candidate exists. This is mostly useful for modes that are initiated with an
-argument, like CtrlPDir.
+one candidate exists.
 Example: >
-  let g:ctrlp_open_single_match = ['dir', 'buffer tags', 'buffer']
+  let g:ctrlp_open_single_match = ['buffer tags', 'buffer']
 <
-For modes that do not support an argument, the variable |g:ctrlp_default_input|
-can be set before launching, and cleared afterwards, with a function such as
+This is currently only really useful together with |g:ctrlp_default_input|
+set before launching, and cleared afterwards, with a function such as
 following: >
   fu! <SID>tagsUnderCursor()
     try
