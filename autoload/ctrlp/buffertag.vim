@@ -67,6 +67,7 @@ let s:types = {
 	\ 'matlab' : '%smatlab%smatlab%sf',
 	\ 'ocaml'  : '%socaml%socaml%scmMvtfCre',
 	\ 'pascal' : '%spascal%spascal%sfp',
+	\ 'delphi' : '%spascal%spascal%sfp',
 	\ 'perl'   : '%sperl%sperl%sclps',
 	\ 'php'    : '%sphp%sphp%scdvf',
 	\ 'python' : '%spython%spython%scmf',
