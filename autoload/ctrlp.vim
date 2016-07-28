@@ -296,6 +296,9 @@ endf
 "}}}1
 " * Open & Close {{{1
 fu! s:Open()
+  if exists('g:ctrlp_by_filename')
+    let s:byfname = g:ctrlp_by_filename
+  endif
 	cal s:log(1)
 	cal s:getenv()
 	cal s:execextvar('enter')
