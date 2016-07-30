@@ -137,7 +137,18 @@ fu! ctrlp#tag#id()
 endf
 
 fu! ctrlp#tag#enter()
-	let tfs = tagfiles()
+
+
+let s:tagfiles = tfs != [] ? filter(map(tfs, 'fnamemodify(v:val, ":p")'),
+\ 'filereadable(v:val)') : []
+endf
+
+fu! ctrlp#tag#enter()
+	if exists('g:ctrlp_tag_custom_files')
+		let tfs = g:ctrlp_tag_custom_files
+	else
+		let tfs = tagfiles()
+	endif
 	let s:tagfiles = tfs != [] ? filter(map(tfs, 'fnamemodify(v:val, ":p")'),
 		\ 'filereadable(v:val)') : []
 endf
