@@ -89,6 +89,9 @@ Overview:~
   |g:ctrlp_buftag_systemenc|....The encoding used for the ctags command.
   |g:ctrlp_buftag_types|........Add new filetypes and set the cmd arguments.
 
+  Tag mode:
+  |g:ctrlp_tag_custom_files|....Specified custom tag files
+
   Advanced options:
   |ctrlp_open_func|.............Use custom file opening functions.
   |ctrlp_status_func|...........Change CtrlP's two statuslines.
@@ -1351,7 +1354,19 @@ Examples: >
       \ 'args': '-f -',
       \ },
     \ }
-<
+
+
+----------------------------------------
+Tag mode options:~
+
+                                                   *'g:ctrlp_tag_custom_files'*
+Use this to set different tags files than standard tags variable. If it is set
+the tag searching consider only those specified files instead of global tags
+variable.
+
+Examples: >
+  let g:ctrlp_tag_custom_files = [".tags", "~/.vim/global_tags"]
+
 
 ===============================================================================
 CUSTOMIZATION                                             *ctrlp-customization*
