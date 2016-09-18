@@ -309,6 +309,8 @@ fu! s:Open()
 	cal s:execextvar('enter')
 	sil! exe 'keepa' ( s:mw_pos == 'top' ? 'to' : 'bo' ) '1new ControlP'
 	cal s:buffunc(1)
+	let s:winnr = winnr()
+	let s:altwinnr = winnr('#')
 	let [s:bufnr, s:winw] = [bufnr('%'), winwidth(0)]
 	let [s:focus, s:prompt] = [1, ['', '', '']]
 	abc <buffer>
@@ -327,6 +329,8 @@ fu! s:Open()
 endf
 
 fu! s:Close(exit)
+	exe s:altwinnr.'winc w'
+	exe s:winnr.'winc w'
 	cal s:buffunc(0)
 	if winnr('$') == 1
 		bw!
@@ -920,13 +924,10 @@ fu! s:PrtDeleteMRU()
 endf
 
 fu! s:PrtExit()
-	let bw = bufwinnr('%')
 	exe bufwinnr(s:bufnr).'winc w'
 	if bufnr('%') == s:bufnr && bufname('%') == 'ControlP'
 		noa cal s:Close(1)
 		noa winc p
-	els
-		exe bw.'winc w'
 	en
 endf
 
