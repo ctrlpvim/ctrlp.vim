@@ -579,7 +579,8 @@ fu! s:MatchedItems(items, pat, limit)
 			\ 'ispath': s:ispath,
 			\ 'crfile': exc,
 			\ 'regex':  s:regexp,
-			\ }] : [items, a:pat, a:limit, s:mmode(), s:ispath, exc, s:regexp]
+			\ 'nosort':  s:matchernosort(),
+			\ }] : [items, a:pat, a:limit, s:mmode(), s:ispath, exc, s:regexp, s:matchernosort()]
 		let lines = call(s:matcher['match'], argms, s:matcher)
 	el
 		let lines = s:MatchIt(items, a:pat, a:limit, exc)
@@ -640,7 +641,7 @@ fu! s:Render(lines, pat)
 	en
 	let s:matched = copy(lines)
 	" Sorting
-	if !s:nosort()
+	if !s:rendernosort()
 		let s:compat = s:martcs.pat
 		cal sort(lines, 's:mixedsort')
 		unl s:compat
@@ -2170,10 +2171,14 @@ fu! s:modevar()
 	let s:spi = !s:itemtype || s:getextvar('specinput') > 0
 endf
 
-fu! s:nosort()
+fu! s:matchernosort()
 	let ct = s:curtype()
-	retu s:matcher != {} || s:nolim == 1 || ( ct == 'mru' && s:mrudef )
+	retu ( ct == 'mru' && s:mrudef )
 		\ || ( ct =~ '^\(buf\|mru\)$' && s:prompt == ['', '', ''] ) || !s:dosort
+endf
+
+fu! s:rendernosort()
+	retu s:matcher != {} || s:nolim == 1 || s:matchernosort()
 endf
 
 fu! s:byfname()
