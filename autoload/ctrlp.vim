@@ -2001,6 +2001,7 @@ fu! s:bufnrfilpath(line)
 			let filpath = bufnr
 		else
 			let bufnr = bufnr(a:line)
+			retu [bufnr, a:line]
 		en
 	en
 	retu [bufnr, filpath]
