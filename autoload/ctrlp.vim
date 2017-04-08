@@ -1,8 +1,9 @@
 " =============================================================================
 " File:          autoload/ctrlp.vim
 " Description:   Fuzzy file, buffer, mru, tag, etc finder.
-" Author:        Kien Nguyen <github.com/kien>
-" Version:       1.79
+" Author:        CtrlP Dev Team
+" Original:      Kien Nguyen <github.com/kien>
+" Version:       1.80
 " =============================================================================
 
 " ** Static variables {{{1
@@ -302,7 +303,6 @@ fu! s:match_window_opts()
 	let s:mw_res =
 		\ s:mw =~ 'results:[^,]\+' ? str2nr(matchstr(s:mw, 'results:\zs\d\+'))
 		\ : min([s:mw_max, &lines])
-	let s:mw_res = max([s:mw_res, 1])
 endf
 "}}}1
 " * Open & Close {{{1
@@ -329,11 +329,11 @@ fu! s:Open()
 	cal s:setupblank()
 endf
 
-fu! s:Close(exit)
+fu! s:Close()
 	cal s:buffunc(0)
 	if winnr('$') == 1
 		bw!
-	elsei a:exit
+	el
 		try | bun!
 		cat | clo! | endt
 		cal s:unmarksigns()
@@ -459,7 +459,7 @@ fu! s:UserCmd(lscmd)
 			call job_stop(s:job)
 		en
 		let g:ctrlp_allfiles = []
-		let s:job = job_start(printf(lscmd, path), {'callback': 'ctrlp#addfile'})
+		let s:job = job_start([&shell, &shellcmdflag, printf(lscmd, path)], {'callback': 'ctrlp#addfile'})
 	elsei has('patch-7.4-597') && !(has('win32') || has('win64'))
 		let g:ctrlp_allfiles = systemlist(printf(lscmd, path))
 	el
@@ -938,7 +938,7 @@ fu! s:PrtExit()
 	let bw = bufwinnr('%')
 	exe bufwinnr(s:bufnr).'winc w'
 	if bufnr('%') == s:bufnr && bufname('%') == 'ControlP'
-		noa cal s:Close(1)
+		noa cal s:Close()
 		noa winc p
 	els
 		exe bw.'winc w'
@@ -1584,7 +1584,7 @@ fu! s:formatline(str)
 				let str .= printf('  %s', '<bp>'.parts[3].'</bp>')
 			en
 		el
-			let str .= printf(' %-5s %-30s  %s',
+			let str .= printf(' %-5s %-30s',
 				\ parts[0],
 				\ parts[2])
 			if (!empty(s:bufpath_mod))
@@ -1764,6 +1764,7 @@ fu! ctrlp#setpathmode(pmode, ...)
 		let spath = a:0 ? a:1 : s:crfpath
 		let markers = ['.git', '.hg', '.svn', '.bzr', '_darcs']
 		if type(s:rmarkers) == 3 && !empty(s:rmarkers)
+			if s:findroot(spath, s:rmarkers, 0, 0) != [] | retu 1 | en
 			cal filter(markers, 'index(s:rmarkers, v:val) < 0')
 			let markers = s:rmarkers + markers
 		en
@@ -1995,9 +1996,14 @@ fu! s:bufnrfilpath(line)
 	en
 	let filpath = fnamemodify(filpath, ':p')
 	let bufnr = bufnr('^'.filpath.'$')
-	if (a:line =~ '[\/]\?\[\d\+\*No Name\]$' && !filereadable(filpath) && bufnr < 1)
-		let bufnr = str2nr(matchstr(a:line, '[\/]\?\[\zs\d\+\ze\*No Name\]$'))
-		let filpath = bufnr
+	if (!filereadable(filpath) && bufnr < 1)
+		if (a:line =~ '[\/]\?\[\d\+\*No Name\]$')
+			let bufnr = str2nr(matchstr(a:line, '[\/]\?\[\zs\d\+\ze\*No Name\]$'))
+			let filpath = bufnr
+		else
+			let bufnr = bufnr(a:line)
+			retu [bufnr, a:line]
+		en
 	en
 	retu [bufnr, filpath]
 endf
@@ -2384,7 +2390,7 @@ endf
 fu! s:matchbuf(item, pat)
 	let bufnr = s:bufnrfilpath(a:item)[0]
 	let parts = s:bufparts(bufnr)
-	let item = bufnr.parts[0].parts[2].s:lash().parts[3]
+	let item = s:byfname ? parts[2] : bufnr.parts[0].parts[2].s:lash().parts[3]
 	retu match(item, a:pat)
 endf
 
@@ -2611,7 +2617,7 @@ if has('autocmd')
 	aug CtrlPAug
 		au!
 		au BufEnter ControlP cal s:checkbuf()
-		au BufLeave ControlP noa cal s:Close(0)
+		au BufLeave ControlP noa cal s:Close()
 		au VimLeavePre * cal s:leavepre()
 	aug END
 en
