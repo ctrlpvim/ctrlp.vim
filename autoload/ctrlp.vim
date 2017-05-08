@@ -684,7 +684,7 @@ fu! s:ForceUpdate()
 endf
 
 fu! s:BuildPrompt(upd)
-	let base = ( s:regexp ? 'r' : '>' ).( s:byfname() ? 'd' : '>' ).'> '
+	let base = ( s:regexp ? '+r ' : '-r ' ).( s:byfname() ? '+d ' : '-d ' ).'> '
 	let str = escape(s:getinput(), '\')
 	let lazy = str == '' || exists('s:force') || !has('autocmd') ? 0 : s:lazy
 	if a:upd && !lazy && ( s:matches || s:regexp || exists('s:did_exp')
@@ -1519,8 +1519,8 @@ fu! ctrlp#statusline()
 	en
 	let tps = s:statypes
 	let max = len(tps) - 1
-	let nxt = tps[s:walker(max, s:itemtype,  1)][1]
-	let prv = tps[s:walker(max, s:itemtype, -1)][1]
+	let nxt = tps[s:walker(max, s:itemtype,  1)][1].'('. substitute(s:prtmaps['ToggleType(1)'][0],'[\<\>]','','g').')'
+	let prv = tps[s:walker(max, s:itemtype, -1)][1].'('. substitute(s:prtmaps['ToggleType(-1)'][0],'[\<\>]','','g').')'
 	let s:ctype = tps[s:itemtype][0]
 	let focus   = s:focus ? 'prt'  : 'win'
 	let byfname = s:ispath ? s:byfname ? 'file' : 'path' : 'line'
