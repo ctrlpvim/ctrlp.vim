@@ -35,9 +35,9 @@ let s:bins = [
 	\ 'ctags-exuberant',
 	\ 'exuberant-ctags',
 	\ 'exctags',
+	\ 'ctags',
 	\ '/usr/local/bin/ctags',
 	\ '/opt/local/bin/ctags',
-	\ 'ctags',
 	\ 'ctags.exe',
 	\ 'tags',
 	\ ]
