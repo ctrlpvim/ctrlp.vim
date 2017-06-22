@@ -570,7 +570,7 @@ fu! s:MatchedItems(items, pat, limit)
 	let exc = exists('s:crfilerel') ? s:crfilerel : ''
 	let items = s:narrowable() ? s:matched + s:mdata[3] : a:items
 	let matcher = s:getextvar('matcher')
-	if empty(matcher)
+	if empty(matcher) || matcher == -1
 		let matcher = s:matcher
 	en
 	if matcher != {}
