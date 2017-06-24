@@ -10,12 +10,15 @@ if exists('g:loaded_ctrlp_line') && g:loaded_ctrlp_line
 en
 let g:loaded_ctrlp_line = 1
 
+let s:sort = get(g:, 'ctrlp_line_sort', 1)
+
 cal add(g:ctrlp_ext_vars, {
 	\ 'init': 'ctrlp#line#init(s:crbufnr)',
 	\ 'accept': 'ctrlp#line#accept',
 	\ 'lname': 'lines',
 	\ 'sname': 'lns',
 	\ 'type': 'tabe',
+	\ 'sort': s:sort,
 	\ })
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
