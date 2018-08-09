@@ -1789,7 +1789,10 @@ endf
 
 fu! ctrlp#setdir(path, ...)
 	let cmd = a:0 ? a:1 : 'lc!'
-	sil! exe cmd s:fnesc(a:path, 'c')
+	let newcwd = s:fnesc(a:path, 'c')
+	if getcwd(0) != newcwd
+		sil! exe cmd newcwd
+	end
 	let [s:crfilerel, s:dyncwd] = [fnamemodify(s:crfile, ':.'), getcwd()]
 endf
 " Fallbacks {{{3
