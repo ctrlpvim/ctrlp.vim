@@ -89,10 +89,16 @@ Use `:diffthis` when opening multiple files to run `:diffthis` on the first 4 fi
     let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
     ```
 
-* Ignore files in `.gitignore`
-    
+* Ignore files in `.gitignore`:
+
     ```vim
       let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+    ```
+
+* Include all git submodules in search:
+
+    ```vim
+      let g:ctrlp_user_command = ['.git', 'cd %s; git ls-files . -co --exclude-standard; for submodule in $(git submodule status | sed "s/[ +]\S\+ \(\S\+\).*/\1/"); do cd "$submodule"; git ls-files . -co --exclude-standard | sed "s#^#$submodule/#"; cd "$OLDPWD"; done', 'find %s -type f']
     ```
 
 Check `:help ctrlp-options` for other options.
