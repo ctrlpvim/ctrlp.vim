@@ -1,4 +1,4 @@
-*ctrlp.txt*       Fuzzy file, buffer, mru, tag, ... finder. v1.79
+*ctrlp.txt*       Fuzzy file, buffer, mru, tag, ... finder. v1.80
 *CtrlP* *ControlP* *'ctrlp'* *'ctrl-p'*
 ===============================================================================
 #                                                                             #
@@ -638,7 +638,6 @@ Set this to 1 to save every MRU file path $HOME/$filepath in the $HOME dir
   let g:ctrlp_tilde_homedir = 0
 <
 Note: This applies also to all dir paths stored by :CtrlPBookmarkDirAdd!
-<
 
                                                       *'g:ctrlp_mruf_relative'*
 Set this to 1 to show only MRU files in the current working directory: >
@@ -879,12 +878,12 @@ COMMANDS                                                       *ctrlp-commands*
 
                                                                 *:CtrlPCurFile*
 :CtrlPCurFile
-    This acts like |:CtrlP| with |g:ctrlp_working_path_mode| = '' and ignores
+    This acts like |:CtrlP| with |g:ctrlp_working_path_mode| = 'c' and ignores
     the variable's current value.
 
                                                                   *:CtrlPCurWD*
 :CtrlPCurWD
-    This acts like |:CtrlP| with |g:ctrlp_working_path_mode| = '' and ignores
+    This acts like |:CtrlP| with |g:ctrlp_working_path_mode| = 'd' and ignores
     the variable's current value.
 
                                                                     *:CtrlPMRU*
@@ -1350,7 +1349,7 @@ Buffer Tag mode options:~
 
                                                    *'g:ctrlp_buftag_ctags_bin'*
 If ctags isn't in your $PATH, or a ctags binary exists in either
-/opt/local/bin or /usr/local/bin, us this to set its location: >
+/opt/local/bin or /usr/local/bin, use this to set its location: >
   let g:ctrlp_buftag_ctags_bin = ''
 <
 
@@ -1512,7 +1511,7 @@ Before 2016/11/28~
     + New command: |YankLine()| to yank current line.
     + New option: |g:ctrlp_types| to select builtin modes.
     + New feature: asynchronized spawn of |g:ctrlp_user_command|. This enable
-                  with set |g:user_command_async| to 1.
+                  with set |g:ctrlp_user_command_async| to 1.
     + Support buffertag for delphi, rust and golang.
     + New option: |g:ctrlp_brief_prompt|,
                   |g:match_current_file|,
