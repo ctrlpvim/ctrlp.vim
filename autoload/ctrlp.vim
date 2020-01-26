@@ -580,7 +580,7 @@ fu! s:MatchedItems(items, pat, limit)
 			\ 'crfile': exc,
 			\ 'regex':  s:regexp,
 			\ 'nosort':  s:matchernosort(),
-			\ }] : [items, a:pat, a:limit, s:mmode(), s:ispath, exc, s:regexp, s:matchernosort()]
+			\ }] : [items, a:pat, a:limit, s:mmode(), s:ispath, exc, s:regexp]
 		let lines = call(s:matcher['match'], argms, s:matcher)
 	el
 		let lines = s:MatchIt(items, a:pat, a:limit, exc)

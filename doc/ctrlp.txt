@@ -822,6 +822,9 @@ Structure of the function: >
     " |
     " +- a:nosort : No sort: 1 or 0. Sorting may be disabled for some plugins.
     " |             Match function should keep item order when a:nosort == 1.
+    " |             Only available when function is called with a dictionary,
+    " |             see note below.
+
 
     return list_of_matched_items
   endfunction
