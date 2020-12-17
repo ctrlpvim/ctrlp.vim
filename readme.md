@@ -31,7 +31,7 @@ Check `:help ctrlp-commands` and `:help ctrlp-extensions` for other commands.
 
 Run `:help ctrlp-mappings` or submit `?` in CtrlP for more mapping help.
 
-* Submit two or more dots `..` to go up the directory tree by one or multiple levels.
+* Input two or more dots `..` and hit the <Enter> key to go up the directory tree by one or multiple levels.
 * End the input string with a colon `:` followed by a command to execute it on the opening file(s):
 Use `:25` to jump to line 25.
 Use `:diffthis` when opening multiple files to run `:diffthis` on the first 4 files.
