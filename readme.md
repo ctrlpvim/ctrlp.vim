@@ -100,6 +100,12 @@ Check `:help ctrlp-options` for other options.
 ## Installation
 Use your favorite method or check the homepage for a [quick installation guide][3].
 
+### Use native plugins installation (for vim > 8.0)
+1. add if not already done "`packloadall`" to your `~/.vimrc`
+2. create `mkdir ~/.vim/pack/plugins/start`, where `plugins` can be any abritrary foldername
+3. `git clone --depth=1 https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/pack/plugins/start/ctrlp.vim`
+4. restart console
+
 ## License
 CtrlP is distributed under Vim's [license][4].
 
