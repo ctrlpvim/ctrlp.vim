@@ -94,6 +94,7 @@ Overview:~
   |ctrlp_status_func|...........Change CtrlP's two statuslines.
   |ctrlp_buffer_func|...........Call custom functions in the CtrlP buffer.
   |ctrlp_match_func|............Replace the built-in matching algorithm.
+  |ctrlp_create_func|...........Use custom file creating functions.
 
 -------------------------------------------------------------------------------
 Detailed descriptions and default values:~
@@ -846,6 +847,13 @@ Example: >
                                                        *'g:ctrlp_brief_prompt'*
 When this is set to 1, the <bs> on empty prompt exit CtrlP.
 
+                                                        *'g:ctrlp_create_func'*
+Define a custom function to create the selected file. This is same as
+|ctrlp_open_func|. This function passes string entered by the user as it is.
+And not record to cache file. So you can create function to open URL with
+browser: >
+  let g:ctrlp_create_func = {}
+<
                                                           *ctrlp-default-value*
 Otherwise, you can use below to change default value.
 Example: >
