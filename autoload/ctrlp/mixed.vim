@@ -64,6 +64,8 @@ fu! s:getnewmix(cwd, clim)
 	if len(g:ctrlp_lines) <= a:clim
 		cal sort(g:ctrlp_lines, 'ctrlp#complen')
 	en
+	" remove duplicates from the final result set
+	let g:ctrlp_lines=filter(copy(g:ctrlp_lines), 'index(g:ctrlp_lines, v:val, v:key+1)==-1')
 	let g:ctrlp_allmixes = { 'filtime': getftime(ctrlp#utils#cachefile()),
 		\ 'mrutime': getftime(ctrlp#mrufiles#cachefile()), 'cwd': a:cwd,
 		\ 'bufs': len(ctrlp#mrufiles#bufs()), 'data': g:ctrlp_lines }
