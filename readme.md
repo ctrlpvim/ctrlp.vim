@@ -98,7 +98,13 @@ Use `:diffthis` when opening multiple files to run `:diffthis` on the first 4 fi
 Check `:help ctrlp-options` for other options.
 
 ## Installation
-Use your favorite method or check the homepage for a [quick installation guide][3].
+If you are using VIM version 8 or higher you can use its built-in package management; see `:help packages` for more information. Just run these commands in your terminal:
+```bash
+git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/vendor/start/ctrlpvim
+vim -u NONE -c "helptags  ~/.vim/pack/vendor/start/ctrlpvim/doc" -c "q"
+```
+
+Otherwise, you can use your favorite method or check the homepage for a [quick installation guide][3].
 
 ## License
 CtrlP is distributed under Vim's [license][4].
