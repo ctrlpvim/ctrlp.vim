@@ -205,7 +205,8 @@ fu! s:parseline(line)
 	let vals = matchlist(a:line,
 		\ '\v^([^\t]+)\t(.+)\t[?/]\^?(.{-1,})\$?[?/]\;\"\t(.+)\tline(no)?\:(\d+)')
 	if vals == [] | retu '' | en
-	let [bufnr, bufname] = [bufnr('^'.vals[2].'$'), fnamemodify(vals[2], ':p:t')]
+	let fname = substitute(vals[2], '\\\\', '/', 'g')
+	let [bufnr, bufname] = [bufnr('^'.fname.'$'), fnamemodify(fname, ':p:t')]
 	retu vals[1].'	'.vals[4].'|'.bufnr.':'.bufname.'|'.vals[6].'| '.vals[3]
 endf
 
