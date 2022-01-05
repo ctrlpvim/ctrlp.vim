@@ -136,7 +136,7 @@ let [s:lcmap, s:prtmaps] = ['nn <buffer> <silent>', {
 	\ 'AcceptSelection("t")': ['<c-t>'],
 	\ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
 	\ 'ToggleFocus()':        ['<s-tab>'],
-	\ 'PrtInputItem()':       ['<c-space>'],
+	\ 'PrtInputItem()':       ['<c-i>'],
 	\ 'ToggleRegex()':        ['<c-r>'],
 	\ 'ToggleByFname()':      ['<c-d>'],
 	\ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
