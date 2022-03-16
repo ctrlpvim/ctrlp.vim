@@ -80,6 +80,7 @@ let [s:pref, s:bpref, s:opts, s:new_opts, s:lc_opts] =
 	\ 'open_func':             ['s:openfunc', {}],
 	\ 'open_multi':            ['s:opmul', '1v'],
 	\ 'open_new_file':         ['s:newfop', 'v'],
+	\ 'create_func':           ['s:createfunc', {}],
 	\ 'prompt_mappings':       ['s:urprtmaps', 0],
 	\ 'regexp_search':         ['s:regexp', 0],
 	\ 'root_markers':          ['s:rmarkers', []],
@@ -1327,7 +1328,7 @@ fu! s:CreateNewFile(...)
 		let md = s:argmaps(md, 1)
 		if md == 'cancel' | retu | en
 	en
-	let str = s:sanstail(str)
+	let [inp, str] = [str, s:sanstail(str)]
 	let [base, fname] = s:headntail(str)
 	if fname =~ '^[\/]$' | retu | en
 	if exists('s:marked') && len(s:marked)
@@ -1340,9 +1341,19 @@ fu! s:CreateNewFile(...)
 		let optyp = str | en | el | let optyp = fname
 	en
 	if !exists('optyp') | retu | en
+
+	if s:createfunc != {} && has_key(s:createfunc, s:ctype)
+		let type = has_key(s:createfunc, 'arg_type') ? s:createfunc['arg_type'] : 'dict'
+		let argms = type == 'dict' ? [{ 'action': md, 'line': inp }]
+			\ : [md, inp]
+		cal s:PrtExit()
+		cal call(s:createfunc[s:ctype], argms, s:createfunc) | retu
+	en
+
 	let [filpath, tail] = [fnamemodify(optyp, ':p'), s:tail()]
 	if !stridx(filpath, s:dyncwd) | cal s:insertcache(str) | en
 	cal s:PrtExit()
+
 	let cmd = md == 'r' ? ctrlp#normcmd('e') :
 		\ s:newfop =~ '1\|t' || ( a:0 && a:1 == 't' ) || md == 't' ? 'tabe' :
 		\ s:newfop =~ '2\|h' || ( a:0 && a:1 == 'h' ) || md == 'h' ? 'new' :
