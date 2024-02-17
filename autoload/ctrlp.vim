@@ -1061,7 +1061,7 @@ fu! s:PrtExit()
 	exe bufwinnr(s:bufnr).'winc w'
 	if bufnr('%') == s:bufnr && bufname('%') == 'ControlP'
 		noa cal s:Close()
-		noa winc p
+		sil! noa winc p
 	els
 		exe bw.'winc w'
 	en
