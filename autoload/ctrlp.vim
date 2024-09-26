@@ -68,6 +68,7 @@ let [s:pref, s:bpref, s:opts, s:new_opts, s:lc_opts] =
 	\ 'jump_to_buffer':        ['s:jmptobuf', 'Et'],
 	\ 'key_loop':              ['s:keyloop', 0],
 	\ 'lazy_update':           ['s:lazy', 0],
+	\ 'lazy_del':              ['s:lazy_del', 0],
 	\ 'match_func':            ['s:matcher', {}],
 	\ 'match_window':          ['s:mw', ''],
 	\ 'match_window_bottom':   ['s:mwbottom', 1],
@@ -270,6 +271,9 @@ fu! s:opts(...)
 	en
 	if s:lazy
 		cal extend(s:glbs, { 'ut': ( s:lazy > 1 ? s:lazy : 250 ) })
+	en
+	if s:lazy_del
+		cal extend(s:glbs, { 'ut': ( s:lazy_del > 1 ? s:lazy_del : 250 ) })
 	en
 	" Extensions
 	if !( exists('extensions') && extensions == s:extensions )
@@ -800,6 +804,7 @@ endf
 fu! s:ForceUpdate()
 	let pos = exists('*getcurpos') ? getcurpos() : getpos('.')
 	sil! cal s:Update(escape(s:getinput(), '\'))
+	let input = s:getinput()
 	cal setpos('.', pos)
 endf
 
@@ -868,7 +873,11 @@ fu! s:PrtBS()
 	en
 	unl! s:hstgot
 	let [s:prompt[0], s:matches] = [substitute(s:prompt[0], '.$', '', ''), 1]
-	cal s:BuildPrompt(1)
+	if s:lazy_del
+		cal s:BuildPrompt(0)
+	el
+		cal s:BuildPrompt(1)
+	en
 endf
 
 fu! s:PrtDelete()
@@ -877,7 +886,11 @@ fu! s:PrtDelete()
 	let [prt, s:matches] = [s:prompt, 1]
 	let prt[1] = matchstr(prt[2], '^.')
 	let prt[2] = substitute(prt[2], '^.', '', '')
-	cal s:BuildPrompt(1)
+	if s:lazy_del
+		cal s:BuildPrompt(0)
+	el
+		cal s:BuildPrompt(1)
+	en
 endf
 
 fu! s:PrtDeleteWord()
@@ -889,7 +902,11 @@ fu! s:PrtDeleteWord()
 		\ : str =~ '\s\+$' ? matchstr(str, '^.*\S\ze\s\+$')
 		\ : str =~ '\v^(\S+|\s+)$' ? '' : str
 	let s:prompt[0] = str
-	cal s:BuildPrompt(1)
+	if s:lazy_del
+		cal s:BuildPrompt(0)
+	el
+		cal s:BuildPrompt(1)
+	en
 endf
 
 fu! s:PrtInsert(...)
@@ -2888,7 +2905,7 @@ fu! s:autocmds()
 	if exists('#CtrlPLazy')
 		au! CtrlPLazy
 	en
-	if s:lazy
+	if s:lazy || s:lazy_del
 		aug CtrlPLazy
 			au!
 			au CursorHold ControlP cal s:ForceUpdate()
