@@ -59,6 +59,8 @@ com! -bar CtrlPUndo      cal ctrlp#init(ctrlp#undo#id())
 com! -n=? -com=buffer CtrlPLine
 	\ cal ctrlp#init(ctrlp#line#cmd('buf', <q-args>))
 
+com! -n=? -com=buffer CtrlPBufFilter
+	\ cal ctrlp#init(ctrlp#buffilter#cmd(1, <q-args>))
 com! -n=? -com=buffer CtrlPChange
 	\ cal ctrlp#init(ctrlp#changes#cmd('fil', <q-args>))
 
