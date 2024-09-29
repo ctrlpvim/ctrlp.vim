@@ -64,6 +64,9 @@ fu! s:getnewmix(cwd, clim)
 	if len(g:ctrlp_lines) <= a:clim
 		cal sort(g:ctrlp_lines, 'ctrlp#complen')
 	en
+	if exists('*uniq')
+		call uniq(g:ctrlp_lines)
+	en
 	let g:ctrlp_allmixes = { 'filtime': getftime(ctrlp#utils#cachefile()),
 		\ 'mrutime': getftime(ctrlp#mrufiles#cachefile()), 'cwd': a:cwd,
 		\ 'bufs': len(ctrlp#mrufiles#bufs()), 'data': g:ctrlp_lines }
