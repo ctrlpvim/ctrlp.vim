@@ -98,6 +98,7 @@ let [s:pref, s:bpref, s:opts, s:new_opts, s:lc_opts] =
 	\ 'compare_lim':           ['s:compare_lim', 0],
 	\ 'bufname_mod':           ['s:bufname_mod', ':t'],
 	\ 'bufpath_mod':           ['s:bufpath_mod', ':~:.:h'],
+	\ 'bufcurfile_filter':     ['s:bufcurfile_filter', 0],
 	\ 'formatline_func':       ['s:flfunc', 's:formatline(v:val)'],
 	\ 'user_command_async':    ['s:usrcmdasync', 0],
 	\ }, {
@@ -641,6 +642,9 @@ fu! ctrlp#buffers(...)
 		retu ids
 	el
 		let bufs = [[], []]
+		if s:bufcurfile_filter
+			call filter(ids, 'v:val != s:crbufnr')
+		en
 		for id in ids
 			let bname = bufname(id)
 			let ebname = bname == ''
