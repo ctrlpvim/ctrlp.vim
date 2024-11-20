@@ -36,7 +36,7 @@ com! -bar CtrlPRoot    cal ctrlp#init('fil', { 'mode': 'r' })
 exe 'nn <silent> <plug>(ctrlp) :<c-u>'.g:ctrlp_cmd.'<cr>'
 
 if g:ctrlp_map != '' && !hasmapto('<plug>(ctrlp)')
-	exe 'map' g:ctrlp_map '<plug>(ctrlp)'
+	exe 'nmap' g:ctrlp_map '<plug>(ctrlp)'
 en
 
 if !exists('g:ctrlp_types') || index(g:ctrlp_types, 'mru') >= 0
