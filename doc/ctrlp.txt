@@ -1219,6 +1219,18 @@ Available extensions:~
     - Name: 'line'
     - Command: ":CtrlPLine [buffer]"
     - Search for a line in all listed buffers or in the specified [buffer].
+                                                                   
+                                                               *:CtrlPBufFilter*
+  * BufFilter mode: ~
+    - Name: 'buffilter'
+    - Command: ":CtrlPBufFilter"
+    - This mode is quite different to the Line mode. In this mode, you can type
+      a few keywords splitted by space, then only the lines contains all the
+      keywords will show up. No fuzzy search.
+      In addition, you can press <c-i>, and then you'll be prompt for
+      keywods, after type the keywords, you can type <c-i> again (or <cr>
+      of coursr)to return to the filter mode. This mode is speically useful for
+      those who need non-ascii input, or paste from keyboard.
 
                                                                  *:CtrlPChange*
                                                               *:CtrlPChangeAll*

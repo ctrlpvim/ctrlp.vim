@@ -136,6 +136,7 @@ let [s:lcmap, s:prtmaps] = ['nn <buffer> <silent>', {
 	\ 'AcceptSelection("t")': ['<c-t>'],
 	\ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
 	\ 'ToggleFocus()':        ['<s-tab>'],
+	\ 'PrtInputItem()':       ['<c-i>'],
 	\ 'ToggleRegex()':        ['<c-r>'],
 	\ 'ToggleByFname()':      ['<c-d>'],
 	\ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
@@ -1152,6 +1153,14 @@ fu! s:ToggleFocus()
 	let s:focus = !s:focus
 	cal s:BuildPrompt(0)
 endf
+function! s:PrtInputItem()
+	" I don't know how to remeber old mappings
+	cmap <silent><c-space> <cr>
+	let oldText = s:prompt[0]
+	let str = input(oldText . ' ')
+	call s:PrtAdd((len(oldText) ? ' ' : '') . str)
+	cunmap <c-space>
+endfunction
 
 fu! s:ToggleRegex()
 	let s:regexp = !s:regexp
@@ -2009,9 +2018,11 @@ fu! ctrlp#syntax()
 endf
 
 fu! s:highlight(pat, grp)
-	if s:matcher != {} | retu | en
+	if s:matcher != {} && !has_key(s:matcher, 'highlight')| retu | en
 	cal clearmatches()
-	if !empty(a:pat) && s:ispath
+	if !empty(a:pat) && s:matcher != {} " user-defined highlights
+		call call(s:matcher['highlight'], [a:pat, a:grp])
+	elseif !empty(a:pat) && s:ispath
 		if s:regexp
 			let pat = substitute(a:pat, '\\\@<!\^', '^> \\zs', 'g')
 			cal matchadd(a:grp, ( s:martcs == '' ? '\c' : '\C' ).pat)
