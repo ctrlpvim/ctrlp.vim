@@ -79,8 +79,29 @@ endf
 
 fu! s:syntax()
 	if !ctrlp#nosy()
-		cal ctrlp#hicheck('CtrlPTabExtra', 'Comment')
-		sy match CtrlPTabExtra '\zs\t.*\ze$'
+		cal ctrlp#hicheck('CtrlPTagComment',  'Comment')
+		cal ctrlp#hicheck('CtrlPTagName',     'Identifier')
+		cal ctrlp#hicheck('CtrlPTagPath',     'PreProc')
+		cal ctrlp#hicheck('CtrlPTagDir',      'PreProc')
+		cal ctrlp#hicheck('CtrlPTagLine',     'Identifier')
+		cal ctrlp#hicheck('CtrlPTagSlash',    'Conceal')
+		cal ctrlp#hicheck('CtrlPTagKind',     'Special')
+		cal ctrlp#hicheck('CtrlPTagField',    'Constant')
+		cal ctrlp#hicheck('CtrlPTagContent',  'Statement')
+
+		sy match  CtrlPTagPrompt               '^>'        nextgroup=CtrlPTagName
+		sy match  CtrlPTagName                 '\s[^\t]\+'ms=s+1        nextgroup=CtrlPTagPath
+		sy match  CtrlPTagPath       skipwhite '\t[^\t]\+'ms=s+1        nextgroup=CtrlPTagLine,CtrlPTagFind contains=CtrlPTagDir
+		sy match  CtrlPTagDir        contained '/\?\([^/\\\t]\+[/\\]\)*'
+		sy match  CtrlPTagLine       contained '\t\d\+'ms=s+1           nextgroup=CtrlPTagComment
+		sy region CtrlPTagFind       concealends matchgroup=Ignore start='\t/^\?'ms=s+1 skip='\(\\\\\)*\\/' end='\$\?/'
+		                                                              \ nextgroup=CtrlPTagComment contains=CtrlPTagSlash
+		sy match  CtrlPTagSlash      contained '\\[/\\^$]'he=s+1 conceal
+		sy region CtrlPTagComment    concealends matchgroup=Ignore oneline start=';"' excludenl end='$'
+		                                                              \ contains=CtrlPTagKind,CtrlPTagField
+		sy match  CtrlPTagKind       contained '\t[a-zA-Z]\>'ms=s+1
+		sy match  CtrlPTagField      contained '\t[a-z]*:[^\t]*'ms=s+1  contains=CtrlPTagContent
+		sy match  CtrlPTagContent    contained ':[^\t]*'ms=s+1
 	en
 endf
 " Public {{{1
