@@ -319,6 +319,9 @@ fu! s:Open()
 		let hst = filereadable(s:gethistloc()[1]) ? s:gethistdata() : ['']
 		let s:hstry = empty(hst) || !s:maxhst ? [''] : hst
 	en
+	if &guicursor == ''
+		let s:glbs['gcr'] = ''
+	en
 	for [ke, va] in items(s:glbs) | if exists('+'.ke)
 		sil! exe 'let s:glb_'.ke.' = &'.ke.' | let &'.ke.' = '.string(va)
 	en | endfo
