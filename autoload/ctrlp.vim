@@ -429,7 +429,7 @@ fu! s:CloseCustomFuncs()
 	en
 endf
 
-if has('patch-8.2-0995') && get(g:, 'ctrlp_use_readdir', 1)
+if has('patch-8.2.0995') && get(g:, 'ctrlp_use_readdir', 1)
 	fu! s:GlobPath(dirs, depth)
 		let entries = []
 		let dirs = substitute(a:dirs, '\\\([%# ]\)', '\1', 'g')
