@@ -44,6 +44,7 @@ if !exists('g:ctrlp_types') || index(g:ctrlp_types, 'mru') >= 0
 en
 
 com! -bar CtrlPTag      cal ctrlp#init(ctrlp#tag#id())
+com! -bar CtrlPHelp     cal ctrlp#init(ctrlp#help#id())
 com! -bar CtrlPQuickfix cal ctrlp#init(ctrlp#quickfix#id())
 
 com! -n=? -com=dir CtrlPDir
