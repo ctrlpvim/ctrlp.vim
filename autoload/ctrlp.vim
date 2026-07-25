@@ -73,7 +73,7 @@ let [s:pref, s:bpref, s:opts, s:new_opts, s:lc_opts] =
 	\ 'match_window_bottom':   ['s:mwbottom', 1],
 	\ 'match_window_reversed': ['s:mwreverse', 1],
 	\ 'max_depth':             ['s:maxdepth', 40],
-	\ 'max_files':             ['s:maxfiles', 10000],
+	\ 'max_files':              ['s:maxfiles', 50000],
 	\ 'max_height':            ['s:mxheight', 10],
 	\ 'max_history':           ['s:maxhst', exists('+hi') ? &hi : 20],
 	\ 'mruf_default_order':    ['s:mrudef', 0],
