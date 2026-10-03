@@ -697,10 +697,16 @@ fu! s:MatchedItems(items, pat, limit)
 			\ 'crfile': exc,
 			\ 'regex':  s:regexp,
 			\ }] : [items, a:pat, a:limit, s:mmode(), s:ispath, exc, s:regexp]
-		let lines = call(matcher['match'], argms, matcher)
-	el
+
+		if !has_key(matcher, 'match_if') || call(matcher['match_if'], argms, matcher)
+			let lines = call(matcher['match'], argms, matcher)
+		en
+	en
+
+	if !exists('lines')
 		let lines = s:MatchIt(items, a:pat, a:limit, exc)
 	en
+
 	let s:matches = len(lines)
 	unl! s:did_exp
 	retu lines
