@@ -390,7 +390,7 @@ fu! ctrlp#files()
 		if empty(lscmd)
 			if !ctrlp#igncwd(s:dyncwd)
 				cal s:InitCustomFuncs()
-				cal s:GlobPath(s:fnesc(s:dyncwd, 'g', ','), 0)
+				cal s:GlobPath(s:use_readdir ? [s:dyncwd] : s:fnesc(s:dyncwd, 'g', ','), 0)
 				cal s:CloseCustomFuncs()
 			en
 		el
@@ -429,11 +429,14 @@ fu! s:CloseCustomFuncs()
 	en
 endf
 
-if has('patch-8.2.0995') && get(g:, 'ctrlp_use_readdir', 1)
+let s:use_readdir = has('patch-8.2.0995') && get(g:, 'ctrlp_use_readdir', 1)
+
+if s:use_readdir
+	" Takes a list of plain directory paths: readdir() needs the real path, not
+	" one escaped for globpath()
 	fu! s:GlobPath(dirs, depth)
 		let entries = []
-		let dirs = substitute(a:dirs, '\\\([%# ]\)', '\1', 'g')
-		for e in split(dirs, ',')
+		for e in a:dirs
 			try
 				let files = readdir(e, '1', {'sort': 'none'})
 				if !s:showhidden | cal filter(files, 'v:val[0] != "."') | en
@@ -446,7 +449,7 @@ if has('patch-8.2.0995') && get(g:, 'ctrlp_use_readdir', 1)
 		let g:ctrlp_allfiles += dnf[1]
 		if !empty(dnf[0]) && !s:maxf(len(g:ctrlp_allfiles)) && depth <= s:maxdepth
 			sil! cal ctrlp#progress(len(g:ctrlp_allfiles), 1)
-			cal s:GlobPath(join(dnf[0], ','), depth)
+			cal s:GlobPath(dnf[0], depth)
 		en
 	endf
 el
